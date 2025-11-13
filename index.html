@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Дашборд с моделью</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            font-family: Arial, sans-serif;
+            background: #f5f5f5;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        .buttons {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        button {
+            padding: 12px 24px;
+            font-size: 16px;
+            background: #006171;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        button:hover {
+            background: #0052a3;
+        }
+        button.active {
+            background: #AAD2DC;
+            border: 2px solid #003366;
+        }
+        .section {
+            background: white;
+            margin: 20px 0;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        h2 {
+            margin-top: 0;
+            color: #333;
+        }
+        iframe {
+            width: 200%;
+            border: none;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Аналитика и 3D визуализация</h1>
+        
+        <!-- Кнопки выбора проекта -->
+        <div class="buttons">
+            <button class="project-btn active" onclick="selectProject('1224-Н-2')">Новосергиевка (1224-Н-2)</button>
+            <button class="project-btn" onclick="selectProject('1176')">Новосаратовка (1176)</button>
+            <button class="project-btn" onclick="selectProject('0824-С-9-2024')">Setl-9 (0824-С-9-2024)</button>
+        </div>
+        
+        <!-- Модель идёт первой -->
+        <div class="section">
+            <h2>3D модель проекта</h2>
+            <iframe id="modelFrame" 
+                    src="https://docs.sgnl.pro/s/i/019a7c2b-f9a9-7232-9ef5-06c3ccd258cd" 
+                    height="1200px"
+                    frameborder="0"
+                    allowfullscreen>
+            </iframe>
+        </div>
+        
+        <!-- Дашборд идёт вторым -->
+        <div class="section">
+            <h2>Дашборд проверки качества модели</h2>
+            <iframe id="dashboardFrame"
+                    src="https://datalens.yandex/ouuno23pnln29" 
+                    height="1200px"
+                    frameborder="0"
+                    allowfullscreen>
+            </iframe>
+        </div>
+    </div>
+
+    <script>
+        const modelMapping = {
+            '1224-Н-2': '019a7c2b-f9a9-7232-9ef5-06c3ccd258cd',
+            '1176': '019a7c64-78ca-7a35-a1fe-bc7006adf76a',
+            '0824-С-9-2024': '019a7c65-703f-7a96-ab1c-f01f6ad0dfc8'
+        };
+
+        let currentProject = '1224-Н-2'; // Проект по умолчанию
+
+        function selectProject(projectCode) {
+            currentProject = projectCode;
+            
+            // Обновляем активную кнопку
+            document.querySelectorAll('.project-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            // Обновляем модель
+            const modelId = modelMapping[projectCode];
+            if (modelId) {
+                document.getElementById('modelFrame').src = 'https://docs.sgnl.pro/s/i/' + modelId;
+            }
+            
+            // Обновляем URL для сохранения выбора
+            window.history.pushState(null, '', '?project=' + encodeURIComponent(projectCode));
+        }
+
+        // Загружаем проект из URL параметра при загрузке страницы
+        window.addEventListener('load', function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const projectCode = urlParams.get('project');
+
+            if (projectCode && modelMapping[projectCode]) {
+                selectProject(projectCode);
+            }
+        });
+    </script>
+</body>
+</html>
