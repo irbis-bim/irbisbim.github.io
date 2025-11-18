@@ -22,12 +22,58 @@
       text-align: center;
       font-size: 22px;
     }
+
+    .columns {
+      display: grid;
+      grid-template-columns: 60% 40%;
+      gap: 10px;
+      align-items: start;
+    }
+    .panel {
+      background: #fff;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      padding: 10px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+      height: 1080px; /* 900px + 10% = 990px, дальше округлено до 1080px для полного FullHD */
+      /* При необходимости увеличьте здесь ещё */
+    }
+    .panel h2 {
+      margin: 0 0 8px 0;
+      font-size: 16px;
+      flex-shrink: 0;
+    }
+    .iframe-wrap {
+      position: relative;
+      width: 100%;
+      flex: 1;
+      min-height: 0;
+      border-radius: 6px;
+      overflow: hidden;
+    }
+    iframe {
+      width: 100%;
+      height: 100%;
+      border: 0;
+      display: block;
+      background: #fff;
+    }
+    /* Кнопки справа */
+    .model-panel-header {
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      margin-bottom: 10px;
+      gap: 10px;
+    }
     .buttons {
       display: flex;
       gap: 10px;
-      justify-content: center;
       flex-wrap: wrap;
-      margin-bottom: 10px;
+      margin: 0;
     }
     .buttons button {
       padding: 10px 16px;
@@ -46,61 +92,21 @@
       color: #003366;
       border: 2px solid #003366;
     }
-    .columns {
-      display: grid;
-      grid-template-columns: 60% 40%;
-      gap: 10px;
-      align-items: stretch;
-    }
-    .panel {
-      background: #fff;
-      border-radius: 8px;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-      padding: 10px;
-      overflow: hidden;
-      display: flex;
-      flex-direction: column;
-      min-width: 0;
-    }
-    .panel h2 {
-      margin: 0 0 8px 0;
-      font-size: 16px;
-      flex-shrink: 0;
-    }
-    .iframe-wrap {
-      position: relative;
-      width: 100%;
-      height: 900px; /* по высоте 1920x1080: 1080px минус заголовки и отступы */
-      overflow: hidden;
-      border-radius: 6px;
-    }
-    #dashboardFrame { height: 900px; }
-    #modelFrame { height: 900px; }
-    iframe {
-      width: 100%;
-      height: 100%;
-      border: 0;
-      display: block;
-      background: #fff;
-    }
+
     @media (max-width: 1200px) {
       .columns {
         grid-template-columns: 1fr;
       }
-      #dashboardFrame, #modelFrame, .iframe-wrap { height: 400px; }
+      .panel, .iframe-wrap, iframe { height: 400px; }
+      .model-panel-header { justify-content: center; }
     }
   </style>
 </head>
 <body>
   <div class="page">
     <h1>Аналитика и 3D визуализация</h1>
-    <div class="buttons">
-      <button class="project-btn active" onclick="selectProject('1224-Н-2')">Новосергиевка (1224-Н-2)</button>
-      <button class="project-btn" onclick="selectProject('1176')">Новосаратовка (1176)</button>
-      <button class="project-btn" onclick="selectProject('0824-С-9-2024')">Setl-9 (0824-С-9-2024)</button>
-    </div>
     <div class="columns">
-      <!-- Левая колонка: дашборд (60%) -->
+      <!-- Левая колонка: дашборд -->
       <section class="panel">
         <h2>Дашборд проверки качества модели</h2>
         <div class="iframe-wrap">
@@ -111,8 +117,15 @@
           ></iframe>
         </div>
       </section>
-      <!-- Правая колонка: 3D модель (40%) -->
+      <!-- Правая колонка: 3D модель -->
       <section class="panel">
+        <div class="model-panel-header">
+          <div class="buttons">
+            <button class="project-btn active" onclick="selectProject('1224-Н-2')">Новосергиевка (1224-Н-2)</button>
+            <button class="project-btn" onclick="selectProject('1176')">Новосаратовка (1176)</button>
+            <button class="project-btn" onclick="selectProject('0824-С-9-2024')">Setl-9 (0824-С-9-2024)</button>
+          </div>
+        </div>
         <h2>3D модель проекта</h2>
         <div class="iframe-wrap">
           <iframe
